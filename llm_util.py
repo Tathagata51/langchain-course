@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm_gemini = ChatGoogleGenerativeAI(
-    model="models/gemini-2.5-flash", temperature=0)
+    model="models/gemini-robotics-er-1.5-preview", temperature=0)
 
 llm_groq = ChatGroq(
     model_name="llama-3.1-8b-instant",

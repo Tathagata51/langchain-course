@@ -26,13 +26,16 @@ class AgentResponse(BaseModel):
 llm = llm_gemini
 tools = [TavilySearch()]
 simple_agent = create_agent(model=llm, tools=tools,
-                            response_format=AgentResponse)
+                            response_format=AgentResponse, system_prompt=(
+                                "Answer the question using tools when needed. "
+                                "Include a list of source URLs used to answer the question."
+                            ))
 
 
 def main():
     result = simple_agent.invoke(
         {"messages": [HumanMessage(content="What's the weather in Tokyo? Search the internet")]})
-    print(result)
+    print(result['structured_response'])
 
 
 if __name__ == "__main__":
