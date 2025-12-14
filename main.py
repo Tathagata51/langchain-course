@@ -1,4 +1,6 @@
 import os
+from typing import List
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.tools import tool
@@ -9,9 +11,22 @@ from langchain_tavily import TavilySearch
 load_dotenv()
 
 
+class Source(BaseModel):
+    '''Schema for a source used by the agent'''
+    url: str = Field(description="The url of the source")
+
+
+class AgentResponse(BaseModel):
+    '''Schema for the agent response with answer and sources'''
+    answer: str = Field(description="The answer to the question")
+    sources: List[Source] = Field(default_factory=list,
+                                  description="The list of sources used to answer the question")
+
+
 llm = llm_gemini
 tools = [TavilySearch()]
-simple_agent = create_agent(model=llm, tools=tools)
+simple_agent = create_agent(model=llm, tools=tools,
+                            response_format=AgentResponse)
 
 
 def main():
